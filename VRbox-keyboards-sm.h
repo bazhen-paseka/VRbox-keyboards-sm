@@ -1,7 +1,7 @@
 /**
 * \version 1.0
 * \author Bazhen Levkovets
-* \date 2019 
+* \date 2021/MAR/10
 *************************************************************************************
 * \copyright	Bazhen Levkovets
 * \copyright	Brovary
@@ -9,14 +9,24 @@
 *************************************************************************************
 */
 
-#ifndef _H_
-#define _H_
+#ifndef VR_B0X_KEYBOARDS_SM_H_INCLUDED
+#define VR_B0X_KEYBOARDS_SM_H_INCLUDED
 
 /*
 **************************************************************************
 *								INCLUDE FILES
 **************************************************************************
 */
+	#include <string.h>
+	#include <stdio.h>
+
+	#include "main.h"
+	#include "i2c.h"
+	#include "usart.h"
+
+	#include "pcf8574_local_config.h"
+	#include "VR-box-keyboards-local-config.h"
+	#include "keyb_4x4_pcf8574_i2c_sm.h"
 
 /*
 **************************************************************************
@@ -47,5 +57,11 @@
 *                              FUNCTION PROTOTYPES
 **************************************************************************
 */
-
-#endif /* _H_ */
+	void VRbox_keyboards_Init (void) ;
+	void VRbox_keyboards_Main (void) ;
+/*
+**************************************************************************
+*                              		  END
+**************************************************************************
+*/
+#endif /* VR_B0X_KEYBOARDS_SM_H_INCLUDED */
