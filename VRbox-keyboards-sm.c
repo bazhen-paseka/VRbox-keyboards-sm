@@ -14,7 +14,7 @@
 *							INCLUDE FILES
 **************************************************************************
 */
-
+	#include "VRbox-keyboards-sm.h"
 /*
 **************************************************************************
 *							LOCAL DEFINES
@@ -54,7 +54,8 @@
 *						 LOCAL GLOBAL VARIABLES
 **************************************************************************
 */
-
+		  PCF8574_Struct  hpcf0;
+		  PCF8574_Struct  hpcf1;
 /*
 **************************************************************************
 *                        LOCAL FUNCTION PROTOTYPES
@@ -66,9 +67,40 @@
 *                           GLOBAL FUNCTIONS
 **************************************************************************
 */
+void VRbox_keyboards_Init (void) {
+	PCF8574_struct_init( &hpcf0, 0, &hi2c1, &huart1, I2C_ADR_PCF_0) ;
+	PCF8574_struct_init( &hpcf1, 1, &hi2c1, &huart1, I2C_ADR_PCF_1) ;
 
+	PCF8574_start_keyboard(&hpcf0) 								;
+
+	PCF8574_IRQ_enable(&hpcf0)									;
+	PCF8574_IRQ_enable(&hpcf1)									;
+}
+//***************************************************************************
+
+void VRbox_keyboards_Main (void) {
+	if (PCF8574_get_IRQ_flag(&hpcf0) == 1) {
+		uint8_t key0 = PCF8574_scan_keyboard(&hpcf0);
+		PCF8574_debug_print_key(&hpcf0, key0)		;
+		PCF8574_update_IRQ_flag(&hpcf0, 0)			;
+		PCF8574_IRQ_enable(&hpcf0)					;
+	}
+
+	if (PCF8574_get_IRQ_flag(&hpcf1) == 1) {
+		uint8_t key1 = PCF8574_scan_keyboard(&hpcf1);
+		PCF8574_debug_print_key(&hpcf1, key1)		;
+		PCF8574_update_IRQ_flag(&hpcf1, 0)			;
+		PCF8574_IRQ_enable(&hpcf1)					;
+	}
+}
 /*
 **************************************************************************
 *                           LOCAL FUNCTIONS
+**************************************************************************
+*/
+
+/*
+**************************************************************************
+*                              		  END
 **************************************************************************
 */
