@@ -58,9 +58,10 @@
 **************************************************************************
 */
 	typedef struct {
-		I2C_HandleTypeDef  	i2c		;
-		UART_HandleTypeDef 	uart	;
-	} 		Debug_Struct			;
+		I2C_HandleTypeDef  	i2c			;
+		UART_HandleTypeDef 	debug_uart	;
+		UART_HandleTypeDef 	main_uart	;
+	} 		VRbox_Struct				;
 /*
 **************************************************************************
 *									 MACRO'S                     
@@ -72,17 +73,17 @@
 *                              FUNCTION PROTOTYPES
 **************************************************************************
 */
-	void VRbox_Debug_Init(	Debug_Struct	 	*_debug	,
-							UART_HandleTypeDef	*_uart ,
-							I2C_HandleTypeDef	*_i2c	) ;
+	void VRbox_Init(	VRbox_Struct	 	*_vrbox			,
+						UART_HandleTypeDef	*_debug_uart	,
+						UART_HandleTypeDef	*_main_uart 	,
+						I2C_HandleTypeDef	*_i2c			) ;
 
-	void VRbox_Main(		Debug_Struct 		*_debug ,
-							PCF8574_Struct  	*_pcf0	,
-							PCF8574_Struct  	*_pcf1	) ;
+	void VRbox_Main(	VRbox_Struct	 	*_vrbox			,
+						PCF8574_Struct  	*_pcf0			,
+						PCF8574_Struct  	*_pcf1			) ;
 
-	void Debug_print_key(	Debug_Struct 		*_debug 	,
-							PCF8574_Struct		*_pcf		,
-							uint8_t 			_button_u8	) ;
+	void VRbox_Send(	VRbox_Struct	 	*_vrbox			,
+						PCF8574_Struct		*_pcf			) ;
 /*
 **************************************************************************
 *                              		  END
