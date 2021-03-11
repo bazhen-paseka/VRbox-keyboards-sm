@@ -20,7 +20,7 @@
 *							LOCAL DEFINES
 **************************************************************************
 */
-	#define		DEBUG_CHARS_SIZE	100
+
 /*
 **************************************************************************
 *							LOCAL CONSTANTS
@@ -59,7 +59,8 @@
 *                        LOCAL FUNCTION PROTOTYPES
 **************************************************************************
 */
-
+	void VRbox_Send(	VRbox_Struct	 	*_vrbox			,
+						PCF8574_Struct		*_pcf			) ;
 /*
 **************************************************************************
 *                           GLOBAL FUNCTIONS
@@ -74,6 +75,7 @@ void VRbox_Init(	VRbox_Struct 		*_vrbox ,
 	_vrbox->main_uart	=	*_main_uart	;
 	_vrbox->i2c 	=	*_i2c 	;
 
+	#define		DEBUG_CHARS_SIZE	100
 	char Debug_Char[DEBUG_CHARS_SIZE] = { 0 }	;
 	int soft_version_arr_int[3];
 	soft_version_arr_int[0] = ((SOFT_VERSION) / 100) %10 ;
@@ -105,37 +107,10 @@ void VRbox_Init(	VRbox_Struct 		*_vrbox ,
 }
 //***************************************************************************
 
-void VRbox_Main(	VRbox_Struct 		*_vrbox ,
-					PCF8574_Struct  	*_pcf0	,
-					PCF8574_Struct  	*_pcf1	)  {
-
-	//---------------------------------------------------------------
-	if ( PCF8574_get_IRQ_flag( _pcf0 ) == SET ) 			{
-		_pcf0->key_current = PCF8574_scan_keyboard( _pcf0 ) 	;
-		if ( _pcf0->key_previous != _pcf0->key_current )		{
-			VRbox_Send(  _vrbox , _pcf0 )				;
-			_pcf0->key_previous = _pcf0->key_current	;
-		}
-		PCF8574_update_IRQ_flag( _pcf0 , RESET )		;
-		PCF8574_IRQ_enable( _pcf0 )						;
-	}
-	//---------------------------------------------------------------
-	if ( PCF8574_get_IRQ_flag( _pcf1 ) == SET ) 			{
-		_pcf1->key_current = PCF8574_scan_keyboard( _pcf1 )	;
-		if ( _pcf1->key_previous != _pcf1->key_current )		{
-			VRbox_Send( _vrbox , _pcf1 )				;
-			_pcf1->key_previous = _pcf1->key_current	;
-		}
-		PCF8574_update_IRQ_flag( _pcf1 , SET )			;
-		PCF8574_IRQ_enable( _pcf1 )						;
-	}
-	//---------------------------------------------------------------
-}
-//***************************************************************************
-
 void VRbox_Send(	VRbox_Struct 	*_vrbox 	,
 					PCF8574_Struct	*_pcf		) {
 
+	#define		DEBUG_CHARS_SIZE	100
 	char 	Debug_Char[DEBUG_CHARS_SIZE]	= { 0 }	;
 	char 	keyboard_char[4][4]	= { { '1', '2', '3', 'a' } ,
 									{ '4', '5', '6', 'b' } ,
@@ -160,6 +135,21 @@ void VRbox_Send(	VRbox_Struct 	*_vrbox 	,
 	HAL_UART_Transmit( &_vrbox->main_uart , (uint8_t *)Main_Char , strlen(Main_Char) , 100 ) ;
 
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin)	;
+}
+//***************************************************************************
+
+void VRbox_Check(	VRbox_Struct	*_vrbox	,
+					PCF8574_Struct 	*_pcf	) {
+
+	if ( PCF8574_get_IRQ_flag( _pcf ) == SET ) {
+	_pcf->key_current = PCF8574_scan_keyboard( _pcf ) ;
+	if ( _pcf->key_previous != _pcf->key_current ) {
+		VRbox_Send( _vrbox , _pcf )					;
+		_pcf->key_previous = _pcf->key_current	;
+	}
+	PCF8574_update_IRQ_flag( _pcf , RESET )	;
+	PCF8574_IRQ_enable( _pcf )				;
+	}
 }
 
 /*

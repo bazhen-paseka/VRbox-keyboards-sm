@@ -78,12 +78,8 @@
 						UART_HandleTypeDef	*_main_uart 	,
 						I2C_HandleTypeDef	*_i2c			) ;
 
-	void VRbox_Main(	VRbox_Struct	 	*_vrbox			,
-						PCF8574_Struct  	*_pcf0			,
-						PCF8574_Struct  	*_pcf1			) ;
-
-	void VRbox_Send(	VRbox_Struct	 	*_vrbox			,
-						PCF8574_Struct		*_pcf			) ;
+	void VRbox_Check(	VRbox_Struct	 	*_vrbox			,
+						PCF8574_Struct  	*_pcf			) ;
 /*
 **************************************************************************
 *                              		  END
