@@ -122,14 +122,14 @@ void VRbox_Send(	VRbox_Struct 	*_vrbox 	,
 	uint8_t 	keyboard_Col_u8 = 0 ;
 	keyboard_Col_u8 = _button_u8 % 10 ;
 	keyboard_Row_u8 = _button_u8 / 10 ;
-	snprintf(Debug_Char, 4, "%d%c ", (int)_pcf->channel, keyboard_char[keyboard_Row_u8][keyboard_Col_u8] ) ;
+	snprintf(Debug_Char, 6, "%d%c ", (int)_pcf->channel, keyboard_char[keyboard_Row_u8][keyboard_Col_u8] ) ;
 	HAL_UART_Transmit(&_vrbox->debug_uart, (uint8_t *)Debug_Char, strlen(Debug_Char), 100) ;
 
-	snprintf(Debug_Char, 6, "%d%02d\r\n", (int)_pcf->channel , _button_u8 ) ;
+	snprintf(Debug_Char, 9, "%d%02d\r\n", (int)_pcf->channel , _button_u8 ) ;
 	HAL_UART_Transmit(&_vrbox->debug_uart, (uint8_t *)Debug_Char, strlen(Debug_Char), 100) ;
 
 
-	#define DEBUG_CHAR_SIZE		6
+	#define DEBUG_CHAR_SIZE		9
 	char 	Main_Char[DEBUG_CHARS_SIZE]	= { 0 }	;
 	snprintf(Main_Char, DEBUG_CHAR_SIZE, "%d%02d\r\n", (int)_pcf->channel , _button_u8 ) ;
 	HAL_UART_Transmit( &_vrbox->main_uart , (uint8_t *)Main_Char , strlen(Main_Char) , 100 ) ;
